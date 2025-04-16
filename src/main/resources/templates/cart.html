@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="fragments/header :: head"></head>
+<body>
+<!-- Navbar -->
+<nav th:replace="fragments/header :: navbar"></nav>
+
+<!-- Main Content -->
+<div class="container mt-4">
+    <div class="main-content">
+        <!-- Cart Page -->
+        <div class="flex-grow-1">
+            <div class="cart-container">
+                <h2 class="cart-title">Your Shopping Cart</h2>
+
+                <div th:if="${cartItems.isEmpty()}" class="text-center py-5">
+                    <h3 class="mb-3">Your cart is empty</h3>
+                    <a th:href="@{/}" class="btn btn-primary">Continue Shopping</a>
+                </div>
+
+                <!-- Cart Items -->
+                <div th:if="${!cartItems.isEmpty()}" th:each="item : ${cartItems}" class="cart-item">
+                    <!-- Show first attachment if available, otherwise use placeholder -->
+                    <img th:if="${!item.product.attachments.isEmpty()}"
+                         th:src="@{'/attachments/' + ${item.product.attachments[0].id}}"
+                         class="cart-item-image" th:alt="${item.product.name}">
+                    <img th:if="${item.product.attachments.isEmpty()}"
+                         th:src="@{/images/placeholder.jpg}"
+                         class="cart-item-image" th:alt="${item.product.name}">
+                    <div class="cart-item-details">
+                        <h5 class="cart-item-title" th:text="${item.product.name}">Product Name</h5>
+                        <div class="cart-item-price" th:text="'$' + ${item.product.price}">$0.00</div>
+                    </div>
+                    <div class="cart-item-quantity">
+                        <form th:action="@{/cart/update/{id}(id=${item.id})}" method="post" class="d-flex align-items-center">
+                            <button type="submit" name="quantity" th:value="${item.quantity - 1}" class="quantity-control">
+                                <i class="bi bi-dash"></i>
+                            </button>
+                            <span class="quantity-value" th:text="${item.quantity}">1</span>
+                            <button type="submit" name="quantity" th:value="${item.quantity + 1}" class="quantity-control">
+                                <i class="bi bi-plus"></i>
+                            </button>
+                        </form>
+                    </div>
+                    <div class="cart-item-total" th:text="'$' + ${item.subtotal}">$0.00</div>
+                    <form th:action="@{/cart/remove/{id}(id=${item.id})}" method="post">
+                        <button type="submit" class="btn-remove">
+                            <i class="bi bi-trash"></i>
+                        </button>
+                    </form>
+                </div>
+            </div>
+
+            <div th:if="${!cartItems.isEmpty()}" class="cart-sidebar">
+                <div class="order-summary">
+                    <h3 class="summary-title">Order Summary</h3>
+
+                    <div class="summary-item">
+                        <span>Items (<span th:text="${cartItems.size()}">0</span>)</span>
+                        <span th:text="'$' + ${subtotal}">$0.00</span>
+                    </div>
+
+                    <div class="summary-item">
+                        <span>Shipping</span>
+                        <span th:text="'$' + ${shipping}">$0.00</span>
+                    </div>
+
+                    <div class="summary-item">
+                        <span>Tax</span>
+                        <span th:text="'$' + ${tax}">$0.00</span>
+                    </div>
+
+                    <div class="summary-divider"></div>
+
+                    <div class="summary-total">
+                        <span>Total</span>
+                        <span th:text="'$' + ${total}">$0.00</span>
+                    </div>
+
+                    <div class="delivery-info">
+                        <div class="delivery-date">
+                            <i class="bi bi-truck"></i>
+                            <span th:text="'Estimated Delivery: ' + ${deliveryDate}">Estimated Delivery: April 22</span>
+                        </div>
+                    </div>
+
+                    <form th:action="@{/cart/checkout}" method="post">
+                        <button type="submit" class="btn-checkout">
+                            Proceed to Checkout
+                        </button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Footer -->
+<footer th:replace="fragments/footer :: footer"></footer>
+</body>
+</html>

@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<body>
+<!-- Sidebar -->
+<div th:fragment="sidebar" class="sidebar d-none d-md-block">
+    <div class="sidebar-header">Categories</div>
+    <ul class="nav flex-column">
+        <li class="nav-item" th:each="category : ${categories}">
+            <a class="nav-link" th:classappend="${currentCategory != null && currentCategory.id == category.id ? 'active' : ''}"
+               th:href="@{/category/{id}(id=${category.id})}">
+                <i th:class="${'bi ' + category.icon}"></i>
+                <span th:text="${category.name}">Category Name</span>
+            </a>
+        </li>
+    </ul>
+</div>
+</body>
+</html>

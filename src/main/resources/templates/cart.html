@@ -20,13 +20,16 @@
 
                 <!-- Cart Items -->
                 <div th:if="${!cartItems.isEmpty()}" th:each="item : ${cartItems}" class="cart-item">
-                    <!-- Show first attachment if available, otherwise use placeholder -->
-                    <img th:if="${!item.product.attachments.isEmpty()}"
-                         th:src="@{'/attachments/' + ${item.product.attachments[0].id}}"
-                         class="cart-item-image" th:alt="${item.product.name}">
-                    <img th:if="${item.product.attachments.isEmpty()}"
-                         th:src="@{/images/placeholder.jpg}"
-                         class="cart-item-image" th:alt="${item.product.name}">
+                    <!-- Расмни base64 форматида кўрсатиш -->
+                    <div th:if="${item.product.attachment != null}">
+                        <img th:src="${item.product.attachment.getBase64ImageUrl()}"
+                             class="cart-item-image" th:alt="${item.product.name}">
+                    </div>
+                    <!-- Агар расм бўлмаса, заглушка кўрсатиш -->
+                    <div th:if="${item.product.attachment == null}">
+                        <img src="https://via.placeholder.com/120x120?text=No+Image"
+                             class="cart-item-image" th:alt="${item.product.name}">
+                    </div>
                     <div class="cart-item-details">
                         <h5 class="cart-item-title" th:text="${item.product.name}">Product Name</h5>
                         <div class="cart-item-price" th:text="'$' + ${item.product.price}">$0.00</div>
@@ -57,10 +60,10 @@
 
                     <div class="summary-item">
                         <span>Items (<span th:text="${cartItems.size()}">0</span>)</span>
-                        <span th:text="'$' + ${subtotal}">$0.00</span>
+                        <!--<span th:text="'$' + ${subtotal}">$0.00</span>-->
                     </div>
 
-                    <div class="summary-item">
+                    <!--<div class="summary-item">
                         <span>Shipping</span>
                         <span th:text="'$' + ${shipping}">$0.00</span>
                     </div>
@@ -68,13 +71,18 @@
                     <div class="summary-item">
                         <span>Tax</span>
                         <span th:text="'$' + ${tax}">$0.00</span>
-                    </div>
+                    </div>-->
 
                     <div class="summary-divider"></div>
 
-                    <div class="summary-total">
+                   <!-- <div class="summary-total">
                         <span>Total</span>
                         <span th:text="'$' + ${total}">$0.00</span>
+                    </div>
+-->
+                    <div class="summary-total">
+                        <span>Total</span>
+                        <span th:text="'$' + ${subtotal}">$0.00</span>
                     </div>
 
                     <div class="delivery-info">

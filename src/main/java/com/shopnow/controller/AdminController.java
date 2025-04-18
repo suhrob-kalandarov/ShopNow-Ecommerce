@@ -35,7 +35,7 @@ public class AdminController {
         return "admin/dashboard";
     }
 
-    // Категории
+    // Категориялар
     @GetMapping("/categories")
     public String listCategories(Model model) {
         model.addAttribute("categories", categoryRepository.findAll());
@@ -63,7 +63,10 @@ public class AdminController {
         return "redirect:/admin/categories";
     }
 
-    // Продукты
+
+
+
+    // Продуктлар
     @GetMapping("/products")
     public String listProducts(Model model) {
         model.addAttribute("products", productRepository.findAll());
@@ -82,19 +85,25 @@ public class AdminController {
     @Transactional
     public String saveProduct(@ModelAttribute Product product,
                               @RequestParam("image") MultipartFile file) {
-        Product savedProduct = productRepository.save(product);
-
+        // Агар файл юкланган бўлса
         if (!file.isEmpty()) {
             try {
+                // Янги Attachment яратиш
                 Attachment attachment = new Attachment();
                 attachment.setName(file.getOriginalFilename());
                 attachment.setContent(file.getBytes());
-                attachment.setProduct(savedProduct);
+
                 attachmentRepository.save(attachment);
+
+                product.setAttachment(attachment);
+
             } catch (IOException e) {
                 e.printStackTrace();
             }
         }
+
+        // Продуктни сақлаш
+        productRepository.save(product);
 
         return "redirect:/admin/products";
     }

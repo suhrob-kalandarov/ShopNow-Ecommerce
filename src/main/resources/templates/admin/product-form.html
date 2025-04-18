@@ -72,9 +72,9 @@
         <div class="mb-3">
           <label for="image" class="form-label">Product Image</label>
           <input type="file" class="form-control" id="image" name="image" accept="image/*">
-          <div th:if="${product.id != null && !product.attachments.isEmpty()}" class="mt-2">
+          <div th:if="${product.id != null && product.attachment != null}" class="mt-2">
             <p>Current Image:</p>
-            <img th:src="@{/images/{id}(id=${product.attachments[0].id})}" alt="Current Product Image" width="100">
+            <img th:src="${product.attachment.getBase64ImageUrl()}" alt="Current Product Image" width="100">
           </div>
         </div>
 

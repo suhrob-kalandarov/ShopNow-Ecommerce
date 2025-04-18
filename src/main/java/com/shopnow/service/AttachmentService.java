@@ -22,7 +22,12 @@ public class AttachmentService {
         return attachmentRepository.findById(id);
     }
 
-    public List<Attachment> getAttachmentsByProductId(Integer productId) {
+    /*public List<Attachment> getAttachmentsByProductId(Integer productId) {
         return attachmentRepository.findByProductId(productId);
     }
+
+    public Optional<Attachment> getFirstAttachmentByProductId(Integer productId) {
+        List<Attachment> attachments = attachmentRepository.findByProductId(productId);
+        return attachments.isEmpty() ? Optional.empty() : Optional.of(attachments.get(0));
+    }*/
 }

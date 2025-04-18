@@ -8,5 +8,5 @@ import java.util.List;
 
 @Repository
 public interface AttachmentRepository extends JpaRepository<Attachment, Integer> {
-    List<Attachment> findByProductId(Integer productId);
+    //List<Attachment> findByProductId(Integer productId);
 }

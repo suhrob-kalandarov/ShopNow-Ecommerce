@@ -2,6 +2,7 @@ package com.shopnow.controller;
 
 import com.shopnow.model.Category;
 import com.shopnow.model.Product;
+import com.shopnow.service.AttachmentService;
 import com.shopnow.service.CartService;
 import com.shopnow.service.CategoryService;
 import com.shopnow.service.ProductService;
@@ -21,12 +22,15 @@ public class HomeController {
     private final ProductService productService;
     private final CategoryService categoryService;
     private final CartService cartService;
+    private final AttachmentService attachmentService;
 
     @Autowired
-    public HomeController(ProductService productService, CategoryService categoryService, CartService cartService) {
+    public HomeController(ProductService productService, CategoryService categoryService,
+                          CartService cartService, AttachmentService attachmentService) {
         this.productService = productService;
         this.categoryService = categoryService;
         this.cartService = cartService;
+        this.attachmentService = attachmentService;
     }
 
     @GetMapping("/")

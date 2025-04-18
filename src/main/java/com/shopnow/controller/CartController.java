@@ -112,7 +112,13 @@ public class CartController {
         return "redirect:/cart";
     }
 
+    // Обновите метод checkout в CartController
     @PostMapping("/checkout")
+    public String checkout() {
+        return "redirect:/orders/checkout";
+    }
+
+    /*@PostMapping("/checkout")
     public String checkout(HttpSession session) {
         // Ensure session ID exists
         String sessionId = getOrCreateSessionId(session);
@@ -122,7 +128,7 @@ public class CartController {
 
         // Redirect to a thank you page or order confirmation
         return "redirect:/";
-    }
+    }*/
 
     private String getOrCreateSessionId(HttpSession session) {
         String sessionId = (String) session.getAttribute("sessionId");

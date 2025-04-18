@@ -24,6 +24,10 @@
                     <i class="bi bi-list"></i>
                 </button>
 
+                <a th:href="@{/orders/my-orders}" class="nav-action-btn">
+                    <i class="bi bi-box"></i>
+                </a>
+
                 <button class="nav-action-btn">
                     <i class="bi bi-heart"></i>
                 </button>
@@ -33,7 +37,9 @@
                     <span class="cart-count" th:text="${cartCount}">0</span>
                 </a>
 
-                <button class="btn btn-signup d-none d-md-block">Sign Up</button>
+                <div>
+                    <button class="btn btn-signup d-none d-md-block">Sign Up</button>
+                </div>
             </div>
         </div>
 
@@ -56,7 +62,7 @@
                 <button class="btn hero-btn">Shop Now <i class="bi bi-arrow-right ms-2"></i></button>
             </div>
             <div class="col-lg-6">
-                <img th:src="@{/images/hero.jpg}" alt="Hero Image" class="hero-image">
+                <img src="/images/Sale%20by%20online%20promo%20code.jpeg" alt="Hero Image" class="hero-image" width="350">
             </div>
         </div>
     </div>

@@ -59,10 +59,11 @@
         <tr th:each="product : ${products}">
           <td th:text="${product.id}">1</td>
           <td>
-            <img th:if="${!product.attachments.isEmpty()}"
-                 th:src="@{/attachments/{id}(id=${product.attachments[0].id})}"
+            <!-- Битта attachment билан ишлаш -->
+            <img th:if="${product.attachment != null}"
+                 th:src="${product.attachment.getBase64ImageUrl()}"
                  alt="Product Image" width="50" height="50">
-            <span th:if="${product.attachments.isEmpty()}">No Image</span>
+            <span th:if="${product.attachment == null}">No Image</span>
           </td>
           <td th:text="${product.name}">Product Name</td>
           <td th:text="${'$' + product.price}">$99.99</td>

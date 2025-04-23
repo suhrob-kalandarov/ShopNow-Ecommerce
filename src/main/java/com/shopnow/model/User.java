@@ -23,6 +23,8 @@ public class User implements UserDetails {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
 
+    private byte[] photo;
+
     private String fullName;
 
     private String phone;

@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="fragments/header :: head"></head>
+
+<body>
+<!-- Navbar -->
+<nav th:replace="fragments/header :: navbar"></nav>
+
+<!-- Profile Section -->
+<div class="container">
+    <h2>User Profile</h2>
+    <form th:action="@{/profile/update}" method="post" enctype="multipart/form-data">
+        <div class="mb-3">
+            <label for="fullName" class="form-label">Full Name</label>
+            <input type="text" class="form-control" id="fullName" name="fullName" th:value="${user.fullName}">
+        </div>
+        <div class="mb-3">
+            <label for="email" class="form-label">Email</label>
+            <input type="email" class="form-control" id="email" name="email" th:value="${user.email}" readonly>
+        </div>
+        <div class="mb-3">
+            <label for="phone" class="form-label">Phone</label>
+            <input type="text" class="form-control" id="phone" name="phone" th:value="${user.phone}">
+        </div>
+        <!--<div class="mb-3">
+            <label for="photo" class="form-label">Profile Photo</label>
+            <input type="file" class="form-control" id="photo" name="photo">
+        </div>-->
+        <button type="submit" class="btn btn-primary">Save Changes</button>
+    </form>
+
+    <hr>
+
+    <form th:action="@{/profile/delete}" method="post">
+        <button type="submit" class="btn btn-danger">Delete Account</button>
+    </form>
+</div>
+
+<!-- Footer -->
+<footer th:replace="fragments/footer :: footer"></footer>
+</body>
+</html>

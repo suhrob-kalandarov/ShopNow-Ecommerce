@@ -2,7 +2,9 @@ package com.shopnow.controller;
 
 import com.shopnow.model.Cart;
 import com.shopnow.model.Order;
+import com.shopnow.model.User;
 import com.shopnow.model.enums.OrderStatus;
+import com.shopnow.repository.UserRepository;
 import com.shopnow.service.CartService;
 import com.shopnow.service.CategoryService;
 import com.shopnow.service.OrderService;
@@ -25,12 +27,14 @@ public class OrderController {
     private final OrderService orderService;
     private final CartService cartService;
     private final CategoryService categoryService;
+    private final UserRepository userRepository;
 
     @Autowired
-    public OrderController(OrderService orderService, CartService cartService, CategoryService categoryService) {
+    public OrderController(OrderService orderService, CartService cartService, CategoryService categoryService, UserRepository userRepository) {
         this.orderService = orderService;
         this.cartService = cartService;
         this.categoryService = categoryService;
+        this.userRepository = userRepository;
     }
 
     @GetMapping("/checkout")
@@ -39,9 +43,8 @@ public class OrderController {
 
         Object principalObj = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
 
-        UserDetails userDetails = (UserDetails) principalObj;
-
-        model.addAttribute("loggedUser", userDetails.getUsername());
+        User user = (User) principalObj;
+        model.addAttribute("loggedUser", user);
 
         List<Cart> cartItems = cartService.getCartItems(sessionId);
 
@@ -83,6 +86,15 @@ public class OrderController {
         order.setCreatedAt(LocalDateTime.now());
         order.setTotalAmount(cartService.getCartSubtotal(sessionId).longValue());
 
+        Object principalObj = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        if (principalObj instanceof UserDetails userDetails) {
+            String username = userDetails.getUsername();
+            User user = userRepository.findByEmail(username).orElse(null);
+            if (user != null) {
+                order.setUser(user);
+            }
+        }
+
         Order savedOrder = orderService.createOrder(order, cartItems);
 
         cartService.clearCart(sessionId);
@@ -91,6 +103,7 @@ public class OrderController {
 
         return "redirect:/orders/confirmation";
     }
+
 
     @GetMapping("/confirmation")
     public String showConfirmationPage(Model model, HttpSession session) {
@@ -115,20 +128,25 @@ public class OrderController {
         return "order-confirmation";
     }
 
+
     @GetMapping("/my-orders")
     public String showMyOrders(Model model, HttpSession session) {
+        Object principalObj = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
 
-        //Integer userId = (Integer) session.getAttribute("userId");
+        User user = (User) principalObj;
 
-        String sessionId = getOrCreateSessionId(session);
+        if (user != null) {
+            List<Order> orders = orderService.getOrdersByUserId(user.getId());
 
-        List<Order> orders = orderService.getAllOrders();
+            String sessionId = getOrCreateSessionId(session);
+            model.addAttribute("orders", orders);
+            model.addAttribute("categories", categoryService.getAllCategories());
+            model.addAttribute("cartCount", cartService.getCartItemCount(sessionId));
 
-        model.addAttribute("orders", orders);
-        model.addAttribute("categories", categoryService.getAllCategories());
-        model.addAttribute("cartCount", cartService.getCartItemCount(sessionId));
+            return "my-orders";
+        }
 
-        return "my-orders";
+        return "redirect:/login";
     }
 
     private String getOrCreateSessionId(HttpSession session) {

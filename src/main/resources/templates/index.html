@@ -19,7 +19,7 @@
         <div class="flex-grow-1">
             <h2 class="section-title" th:text="${currentCategory != null ? currentCategory.name : 'All Products'}">All Products</h2>
 
-            <div class="product-grid">
+            <div class="product-grid grid-cols-5 gap-4">
                 <!-- Products -->
                 <div class="card product-card" th:each="product : ${products}">
 

@@ -28,12 +28,15 @@ public class OrderService {
         this.productRepository = productRepository;
     }
 
+    public List<Order> getOrdersByUserId(Integer userId) {
+        return orderRepository.findByUserId(userId);
+    }
+
+
     @Transactional
     public Order createOrder(Order order, List<Cart> cartItems) {
-        // Save order first to get ID
         Order savedOrder = orderRepository.save(order);
 
-        // Create order items from cart items
         for (Cart cartItem : cartItems) {
             Product product = cartItem.getProduct();
 
@@ -57,9 +60,5 @@ public class OrderService {
 
     public List<Order> getUserOrders(Integer userId) {
         return orderRepository.findAllByUserId(userId);
-    }
-
-    public List<Order> getAllOrders() {
-        return orderRepository.findAll();
     }
 }

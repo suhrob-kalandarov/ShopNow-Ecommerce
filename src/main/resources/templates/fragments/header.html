@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org">
+<html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.w3.org/1999/xhtml">
 <head th:fragment="head">
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -12,6 +12,7 @@
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <link th:href="@{/css/styles.css}" rel="stylesheet">
 </head>
+
 <body>
 <!-- Navbar -->
 <nav th:fragment="navbar" class="navbar navbar-expand-lg navbar-light bg-light sticky-top">
@@ -37,9 +38,11 @@
                     <span class="cart-count" th:text="${cartCount}">0</span>
                 </a>
 
-                <!--<div>
-                    <button class="btn btn-signup d-none d-md-block">Sign Up</button>
-                </div>-->
+                <div>
+                    <a sec:authorize="isAnonymous()" class="btn btn-signup d-none d-md-block" href="/login">Login</a>
+                    <a sec:authorize="isAuthenticated()" class="btn btn-signup d-none d-md-block" href="/profile">Profile</a>
+                </div>
+
             </div>
         </div>
 

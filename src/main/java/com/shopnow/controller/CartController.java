@@ -27,6 +27,7 @@ public class CartController {
         this.categoryService = categoryService;
     }
 
+
     @GetMapping
     public String viewCart(Model model, HttpSession session) {
         String sessionId = getOrCreateSessionId(session);
@@ -63,6 +64,7 @@ public class CartController {
         return "cart";
     }
 
+
     @PostMapping("/add/{productId}")
     public String addToCart(
             @PathVariable Integer productId,
@@ -74,6 +76,7 @@ public class CartController {
 
         return "redirect:/";
     }
+
 
     @PostMapping("/update/{cartItemId}")
     public String updateCartItem(
@@ -87,6 +90,7 @@ public class CartController {
         return "redirect:/cart";
     }
 
+
     @PostMapping("/remove/{cartItemId}")
     public String removeFromCart(@PathVariable Long cartItemId, HttpSession session) {
 
@@ -95,6 +99,7 @@ public class CartController {
 
         return "redirect:/cart";
     }
+
 
     @PostMapping("/clear")
     public String clearCart(HttpSession session) {
@@ -105,10 +110,19 @@ public class CartController {
         return "redirect:/cart";
     }
 
+
     @PostMapping("/checkout")
-    public String checkout() {
-        return "redirect:/orders/checkout";
+    public String proceedToCheckout(HttpSession session, Model model) {
+        String sessionId = getOrCreateSessionId(session);
+        List<Cart> cartItems = cartService.getCartItems(sessionId);
+        Double subtotal = cartService.getCartSubtotal(sessionId);
+
+        model.addAttribute("cartItems", cartItems);
+        model.addAttribute("subtotal", subtotal);
+
+        return "checkout";
     }
+
 
     private String getOrCreateSessionId(HttpSession session) {
         String sessionId = (String) session.getAttribute("sessionId");
